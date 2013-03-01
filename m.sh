@@ -22,9 +22,6 @@
 # TODO: fuzzy matching, tab completion
 
 
-# warn and debug
-__m_warn ()  { echo "${_M_CMD:-m}: $@" >&2; }
-
 __m () {
   # usage instructions {{{
 
@@ -65,13 +62,14 @@ EOF
 
   # if we don't own it, that's no good.
   [ -f "$datafile" -a ! -O "$datafile" ] && {
-    __m_warn "we don't own the data file $datafile"; return
+    echo "${_M_CMD:-m}: we don't own the data file $datafile" >&2; return 1
   }
 
   # quickly check if it appears to be the right file
   [ -f "$datafile" ] && [ "$(cat "$datafile")" != "" ] && {
     [ "$(head -n1 $datafile)" = "$fileheader" ] || {
-      __m_warn "file $datafile doesn't seem to be the data file"; return
+      echo "${_M_CMD:-m}: file $datafile doesn't seem to be the data file" >&2
+      return 1
     }
   } || {
     # initialize data file if it didn't exist or was empty
@@ -96,19 +94,19 @@ EOF
 
     -a|--add)
       [ "$2" ] && { addlist+=( "$2" ); } || {
-        __m_warn "--add takes an argument"; return 1;
+        echo "${_M_CMD:-m}: --add takes an argument" >&2; return 1
       }; shift ;;
 
     -d|--delete)
       [ "$2" ] && { deletelist+=( "$2" ); } || {
-        __m_warn "--delete takes an argument"; return 1;
+        echo "${_M_CMD:-m}: --delete takes an argument" >&2; return 1
       }; shift ;;
 
     -l|--list)
       list=yes ;;
 
     -*)
-      __m_warn "invalid option: $1" ;;
+      echo "${_M_CMD:-m}: invalid option: $1" >&2 ;;
 
     *)
       local lhs=$(expr "$1" : "\(.*\)=")
@@ -131,7 +129,9 @@ EOF
     (( ${#addlist[@]} + ${#deletelist[@]} )) && { echo "$usage"; return 1; }
 
     local target=$(grep -e "^$jump=" "$datafile" | cut -d= -f2)
-    [ -z "$target" ] && { warn "no such bookmark: $jump"; return 1; }
+    [ -z "$target" ] && {
+      echo "${_M_CMD:-m}: no such bookmark: $jump"; return 1
+    }
     cd "$target"
     return 0
   }
@@ -145,7 +145,9 @@ EOF
 
     [ "$name" = "$path" ] && path=.
 
-    [ ! -d "$path" ] && { __m_warn "$path: no such directory"; return; }
+    [ ! -d "$path" ] && {
+      echo "${_M_CMD:-m}: $path: no such directory"; return 1
+    }
 
     # expand the path
     path=$(builtin cd "$path" 2>/dev/null; echo $(pwd $follow))
