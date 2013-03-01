@@ -6,15 +6,19 @@
 
 [`z`]: https://github.com/rupa/z
 
+Homepage: https://github.com/vaz/m
+
 ### INSTALLATION
 
 Source it from your `~/.bashrc` or `~/.zsh` (not tested in zsh, yet!):
 
+```sh
     . /path/to/m.sh
+```
 
 ### USAGE
 
-```
+```text
 Synopsis:
     m [-h] [--list]
     m [-s] [--add name[=path]] [--delete name] [name=[path]] ...
