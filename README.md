@@ -2,11 +2,15 @@
 
 ## bookmark and jump to paths
 
-`m` lets you bookmark paths and jump quickly to them.  It's a little tool written in the spirit of [`z`], yo.
+`m` lets you bookmark paths and jump quickly to them.  It's a quick little tool written in the spirit of [`z`], yo.
 
 [`z`]: https://github.com/rupa/z
 
-Homepage: https://github.com/vaz/m
+Homepage and bug reports: https://github.com/vaz/m
+
+#### TODO
+
+- fuzzy matching of jump targets
 
 ### INSTALLATION
 
