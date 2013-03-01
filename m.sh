@@ -30,14 +30,30 @@ __m () {
 
   local usage
   read -d '' usage <<EOF
-Usage:
-    m [-l|--list]
-    m [-s] [--add <name>[=<path>]] [--delete <name>] [<name>=[<path>]] ...
-    m [-s] <target name>
+Synopsis:
+    m [-h] [--list]
+    m [-s] [--add name[=path]] [--delete name] [name=[path]] ...
+    m [-s] name
 
-    The -s (or --follow) flag will resolve symlinks when saving or jumping
-    to a path.  Paths are expanded and in the --add command will default to
-    the current directory.
+Options:
+    -s|--follow             resolve symlinks when saving/jumping
+    -a|--add name[=path]    path defaults to \$PWD
+    -d|--delete name
+    -h|--help               you're looking at it
+
+Examples:
+    m --add foo             bookmark current directory as 'foo'
+    m -s --a tmp=/tmp       bookmark /tmp (resolves symlinks first) as 'tmp'
+    m foo=.                 bookmark current directory as 'foo'
+
+    m --delete etc          delete bookmark named 'etc'
+    m foo=                  delete bookmark named 'foo'
+
+    m foo                   jump to path bookmarked with name 'foo'
+    m -s foo                jump to path resolving symlinks
+
+    m --list                list bookmarks
+    m                       list bookmarks
 
 EOF
 
